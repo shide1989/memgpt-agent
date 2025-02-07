@@ -1,0 +1,36 @@
+{
+  "working": {
+    "maxSize": 10,
+    "currentSize": 0,
+    "entries": []
+  },
+  "core": {
+    "maxSize": 5,
+    "currentSize": 2,
+    "entries": [
+      {
+        "id": "118ae392-62a8-4abd-a899-0cd217658c35",
+        "content": "The user's name is Seb",
+        "timestamp": 1738917126636,
+        "importance": 1,
+        "category": "core",
+        "metadata": {
+          "lastAccessed": 1738917126636,
+          "accessCount": 0
+        }
+      },
+      {
+        "id": "7cbe8877-7bf0-4d42-8304-e972d4fad02e",
+        "content": "The user's name is Seb.",
+        "timestamp": 1738917732814,
+        "importance": 1,
+        "category": "core",
+        "metadata": {
+          "lastAccessed": 1738917732814,
+          "accessCount": 0
+        }
+      }
+    ]
+  },
+  "archival": []
+}
