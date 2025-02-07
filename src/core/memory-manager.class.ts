@@ -219,6 +219,7 @@ export class MemoryManager {
                 .sort((a, b) => b.relevance - a.relevance)
                 .slice(0, limit);
 
+            Logger.memory('Search Results', { count: results.length });
             return {
                 success: true,
                 message: `Found ${results.length} matching memories`,

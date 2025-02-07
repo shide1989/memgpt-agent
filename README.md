@@ -17,3 +17,45 @@ A proof-of-concept implementation of a MemGPT-style chatbot with self-managed me
 - `pnpm lint` - Run ESLint
 - `pnpm format` - Format code with Prettier
 - `pnpm dev` - Run in development mode with hot reload
+
+### Example chat
+
+```
+❯ pnpm start
+
+MemGPT Chat initialized. Type "exit" to quit.
+---------------------------------------------
+You: my name is seb
+[Function] insert_memory {
+  "content": "Seb",
+  "category": "core",
+  "importance": 1
+}
+[Memory] Inserting {
+  "category": "core",
+  "content": "Seb...",
+  "importance": 1
+}
+
+=== Memory State ===
+Working Memory: 0/10
+Core Memory: 1/5
+Archival Memory: 0 entries
+==================
+
+
+Assistant: Nice to meet you, Seb! How can I assist you today? 
+
+You: what is my name
+[Function] search_memory {
+  "query": "Seb",
+  "category": "core"
+}
+[Memory] Search Results {
+  "count": 1
+}
+
+Assistant: Your name is Seb. 
+
+You: exit
+```
