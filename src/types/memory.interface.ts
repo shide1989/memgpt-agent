@@ -8,6 +8,7 @@ export interface MemoryEntry {
     importance: number; // 0-1 score for memory priority
     category: MemoryCategory;
     metadata: MemoryMetadata;
+    embedding?: number[] | null;  // Store embedding vector
 }
 
 /**
@@ -25,8 +26,9 @@ export enum MemoryCategory {
 export interface MemoryMetadata {
     lastAccessed?: number;
     accessCount: number;
-    associations?: string[]; // Related memory IDs
-    embedding?: number[]; // Vector embedding for similarity search
+    consolidatedFrom?: string[];  // Add this line
+    associations?: string[];
+    archivedAt?: number
 }
 
 /**
@@ -54,5 +56,12 @@ export interface MemorySearchParams {
     query: string;
     category?: MemoryCategory;
     limit?: number;
-    minImportance?: number;
+    minSimilarity?: number;  // Replace minImportance
+}
+
+interface SummarizationStrategy {
+    // Trigger summarization when buffer reaches threshold
+    workingMemoryThreshold: number;    // e.g., 80% full
+    timeWindow: number;                // e.g., last 24 hours
+    importanceThreshold: number;       // e.g., > 0.7
 }

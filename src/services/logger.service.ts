@@ -27,7 +27,8 @@ export class Logger {
     static error(error: Error | string): void {
         console.error(
             chalk.red('[Error]'),
-            chalk.white(typeof error === 'string' ? error : error.message)
+            chalk.white(typeof error === 'string' ? error : error.message),
+            (error as Error).stack ? chalk.gray((error as Error).stack) : ''
         );
     }
 

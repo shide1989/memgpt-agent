@@ -85,3 +85,9 @@ export interface FunctionDefinition {
         required: string[];
     };
 }
+
+interface SummarizeMemoryParams extends FunctionParams {
+    category: MemoryCategory;
+    detailed?: boolean;
+    timeframe?: string;
+}
