@@ -17,6 +17,8 @@ async function main() {
 
     const chatManager = new ChatManager(process.env.OPENAI_API_KEY);
 
+    await chatManager.init();
+
     console.log('MemGPT Chat initialized. Type "exit" to quit.');
     console.log('---------------------------------------------');
 

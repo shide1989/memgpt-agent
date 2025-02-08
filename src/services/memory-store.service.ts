@@ -11,7 +11,6 @@ export class MemoryStore {
             category: memory.category,
             importance: memory.importance,
             embedding: memory.embedding,
-            metadata: memory.metadata
         });
     }
 

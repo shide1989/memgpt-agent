@@ -25,7 +25,7 @@ export class ChatManager {
 
         // Default configuration
         this.config = {
-            model: 'gpt-4',
+            model: 'gpt-4o-mini',
             temperature: 0.5,
             maxTokens: 2000,
             systemPrompt: `You are an AI assistant with self-managed memory capabilities. 
@@ -59,6 +59,11 @@ When responding, consider relevant memories and maintain conversation coherence.
             content: this.config.systemPrompt
         });
     }
+
+    public async init() {
+        this.memoryManager.loadMemoriesFromDB();
+    }
+
 
     public async chat(userInput: string): Promise<string> {
         try {

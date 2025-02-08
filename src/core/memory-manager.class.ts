@@ -55,12 +55,9 @@ export class MemoryManager {
             minMemoriesForSummary: 5,
             targetReduction: 3
         };
-
-        // Load memories from database on startup
-        this.loadMemoriesFromDB();
     }
 
-    private async loadMemoriesFromDB(): Promise<void> {
+    async loadMemoriesFromDB(): Promise<void> {
         try {
             // Load and map working memories
             const workingMemories = await this.memoryStore.getByCategory(MemoryCategory.WORKING);
@@ -91,7 +88,7 @@ export class MemoryManager {
             }));
         } catch (error) {
             Logger.error('Failed to load memories from database:');
-            Logger.error(error as Error);
+            throw error;
         }
     }
 
