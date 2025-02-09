@@ -24,11 +24,14 @@ export class Logger {
         );
     }
 
-    static error(error: Error | string): void {
+    static error(error: Error | string, cause?: Error | string): void {
         console.error(
             chalk.red('[Error]'),
             chalk.white(typeof error === 'string' ? error : error.message),
-            (error as Error).stack ? chalk.gray((error as Error).stack) : ''
+            (error as Error).stack ? chalk.gray((error as Error).stack) : '',
+            cause && chalk.yellow('\nCaused by:'),
+            cause && chalk.white(typeof cause === 'string' ? cause : cause.message),
+            cause && (cause as Error).stack ? chalk.gray((cause as Error).stack) : ''
         );
     }
 
