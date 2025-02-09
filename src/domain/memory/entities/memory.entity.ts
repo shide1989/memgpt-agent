@@ -5,14 +5,13 @@ export enum MemoryCategory {
 }
 
 export interface MemoryMetadata {
-    lastAccessed?: number;
-    accessCount: number;
     consolidatedFrom?: string[];
     associations?: string[];
     archivedAt?: number;
+    originalId?: string;
 }
 
-export class Memory {
+export class MemoryEntity {
     constructor(
         public readonly id: string,
         public readonly content: string,
@@ -20,10 +19,9 @@ export class Memory {
         public readonly importance: number,
         public readonly timestamp: number,
         public readonly embedding?: number[],
-        public readonly metadata: MemoryMetadata = {
-            accessCount: 0,
-            lastAccessed: Date.now()
-        }
+        public readonly metadata: MemoryMetadata = {},
+        public readonly accessCount: number = 0,
+        public readonly lastAccessed: number = Date.now()
     ) { }
 
     static create(
@@ -33,19 +31,15 @@ export class Memory {
         importance: number,
         embedding?: number[],
         metadata?: Partial<MemoryMetadata>
-    ): Memory {
-        return new Memory(
+    ): MemoryEntity {
+        return new MemoryEntity(
             id,
             content,
             category,
             importance,
             Date.now(),
             embedding,
-            {
-                accessCount: 0,
-                lastAccessed: Date.now(),
-                ...metadata
-            }
+            metadata
         );
     }
 }

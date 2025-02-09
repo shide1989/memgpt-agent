@@ -1,12 +1,12 @@
-import { db } from '../../../../db/client';
+import { db } from '../client';
 import { memories } from '../schema/memory.schema';
 import { eq, sql } from 'drizzle-orm';
-import { Memory, MemoryCategory } from '../../../../domain/memory/entities/memory.entity';
+import { MemoryEntity, MemoryCategory } from '../../../../domain/memory/entities/memory.entity';
 import { MemoryRepository } from '../../../../domain/memory/repositories/memory.repository';
 import { Logger } from '../../../../services/logger.service';
 
 export class PostgresMemoryRepository implements MemoryRepository {
-    async insert(memory: Memory): Promise<void> {
+    async insert(memory: MemoryEntity): Promise<void> {
         try {
             await db.insert(memories).values({
                 id: memory.id,
@@ -23,7 +23,7 @@ export class PostgresMemoryRepository implements MemoryRepository {
         }
     }
 
-    async findById(id: string): Promise<Memory | null> {
+    async findById(id: string): Promise<MemoryEntity | null> {
         try {
             const result = await db.query.memories.findFirst({
                 where: eq(memories.id, id)
@@ -35,7 +35,7 @@ export class PostgresMemoryRepository implements MemoryRepository {
         }
     }
 
-    async findByCategory(category: MemoryCategory): Promise<Memory[]> {
+    async findByCategory(category: MemoryCategory): Promise<MemoryEntity[]> {
         try {
             const results = await db.query.memories.findMany({
                 where: eq(memories.category, category)
@@ -47,11 +47,12 @@ export class PostgresMemoryRepository implements MemoryRepository {
         }
     }
 
-    async semanticSearch(embedding: number[], limit: number = 5): Promise<Memory[]> {
+    async semanticSearch(embedding: number[], limit: number = 5, category: MemoryCategory | undefined = undefined): Promise<MemoryEntity[]> {
         try {
             const results = await db.query.memories.findMany({
                 orderBy: sql`embedding <-> ${JSON.stringify(embedding)}::vector`,
-                limit
+                limit,
+                where: category ? eq(memories.category, category) : undefined
             });
             return results.map(this.mapToMemory);
         } catch (error) {
@@ -84,8 +85,8 @@ export class PostgresMemoryRepository implements MemoryRepository {
         }
     }
 
-    private mapToMemory(dbMemory: any): Memory {
-        return new Memory(
+    private mapToMemory(dbMemory: any): MemoryEntity {
+        return new MemoryEntity(
             dbMemory.id,
             dbMemory.content,
             dbMemory.category as MemoryCategory,

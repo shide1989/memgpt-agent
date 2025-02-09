@@ -1,25 +1,24 @@
 import OpenAI from 'openai';
 
-import { MemoryManager } from './memory-manager.class';
-import { FunctionCaller } from './function-caller.class';
+import { MemoryManager } from '../../memory/services/memory-manager.service';
+import { FunctionCaller } from '../../../core/function-caller.class';
 
-import { Message, ChatConfig } from '../types/chat.interface';
-import { FunctionCallResult } from '../types/functions.interface';
+import { Message, ChatConfig } from '../../../types/chat.interface';
+import { FunctionCallResult } from '../../../types/functions.interface';
 
-import { Logger } from '../services/logger.service';
+import { Logger } from '../../../services/logger.service';
+import { OpenAIService } from '../../../infrastructure/openai/openai.service';
 
-export class ChatManager {
-    private openai: OpenAI;
+export class ChatManager extends OpenAIService {
     private memoryManager: MemoryManager;
     private functionCaller: FunctionCaller;
     private config: ChatConfig;
     private conversationHistory: Message[] = [];
 
     constructor(
-        apiKey: string,
         config: Partial<ChatConfig> = {}
     ) {
-        this.openai = new OpenAI({ apiKey });
+        super();
         this.memoryManager = new MemoryManager();
         this.functionCaller = new FunctionCaller(this.memoryManager);
 

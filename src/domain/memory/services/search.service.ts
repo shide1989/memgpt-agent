@@ -1,59 +1,100 @@
+import { OpenAIService } from '../../../infrastructure/openai/openai.service';
 import { Logger } from '../../../services/logger.service';
-import { Memory } from '../entities/memory.entity';
-import { MemoryOperationResult } from '../value-objects/operation-result.vo';
+import { MemoryCategory, MemoryEntity } from '../entities/memory.entity';
 import { MemoryRepository } from '../repositories/memory.repository';
-import { EmbeddingService } from '../../../infrastructure/openai/embedding.service';
 
 export interface SearchParams {
     query: string;
-    category?: string;
+    embedding?: number[];
+    category?: MemoryCategory;
     limit?: number;
     minSimilarity?: number;
+    searchStrategy?: 'hierarchical' | 'single-category';
 }
 
 export class SearchService {
     constructor(
         private readonly memoryRepository: MemoryRepository,
-        private readonly embeddingService: EmbeddingService
+        private readonly openAiService: OpenAIService
     ) { }
 
-    async search(params: SearchParams): Promise<MemoryOperationResult<Memory[]>> {
+    async search(params: SearchParams): Promise<MemoryEntity[]> {
         try {
-            const { query, category, limit = 5 } = params;
+            const {
+                query,
+                embedding,
+                category,
+                limit = 5,
+                searchStrategy = 'single-category'
+            } = params;
 
-            // Generate embedding for search query
-            const queryEmbedding = await this.embeddingService.getEmbedding(query);
+            // Get embedding either from query or use provided embedding
+            const searchEmbedding = embedding ||
+                (query ? await this.openAiService.getEmbedding(query) : null);
 
-            // Perform semantic search
-            let results = await this.memoryRepository.semanticSearch(queryEmbedding, limit);
-
-            // Filter by category if specified
-            if (category) {
-                results = results.filter(memory => memory.category === category);
+            if (!searchEmbedding) {
+                // return MemoryOperationResult.failure('No search criteria provided');
+                Logger.warn('No search criteria provided');
+                return []
             }
 
-            // Update access counts
-            await Promise.all(
-                results.map(memory =>
-                    this.memoryRepository.updateAccessCount(memory.id)
-                )
-            );
+            let results: MemoryEntity[] = [];
 
-            Logger.memory('Semantic search completed', {
-                query,
+            if (searchStrategy === 'hierarchical') {
+                results = await this.hierarchicalSearch(searchEmbedding, limit);
+            } else {
+                results = await this.memoryRepository.semanticSearch(
+                    searchEmbedding,
+                    limit,
+                    category
+                );
+            }
+
+            Logger.memory('Search completed', {
+                strategy: searchStrategy,
                 category,
                 resultsCount: results.length
             });
 
-            return MemoryOperationResult.success(
-                `Found ${results.length} matching memories`,
-                results
-            );
+            return results
         } catch (error) {
             Logger.error('Search failed:', error as Error);
-            return MemoryOperationResult.failure(
-                `Search failed: ${(error as Error).message}`
-            );
+            return []
         }
+    }
+
+    private async hierarchicalSearch(embedding: number[], limit: number): Promise<MemoryEntity[]> {
+        // Search in order: Core -> Working -> Archival
+        const results: MemoryEntity[] = [];
+
+        // Search core memories first
+        const coreMemories = await this.memoryRepository.semanticSearch(
+            embedding,
+            limit,
+            MemoryCategory.CORE
+        );
+        results.push(...coreMemories);
+
+        if (results.length < limit) {
+            // Search working memories next
+            const workingMemories = await this.memoryRepository.semanticSearch(
+                embedding,
+                limit - results.length,
+                MemoryCategory.WORKING
+            );
+            results.push(...workingMemories);
+        }
+
+        if (results.length < limit) {
+            // Search archival memories last
+            const archivalMemories = await this.memoryRepository.semanticSearch(
+                embedding,
+                limit - results.length,
+                MemoryCategory.ARCHIVAL
+            );
+            results.push(...archivalMemories);
+        }
+
+        return results;
     }
 }

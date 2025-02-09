@@ -1,12 +1,14 @@
 import OpenAI from 'openai';
-import { Memory } from '../entities/memory.entity';
+import { MemoryEntity } from '../entities/memory.entity';
 import { Logger } from '../../../services/logger.service';
+import { OpenAIService } from '../../../infrastructure/openai/openai.service';
 
 export class SummarizationService {
-    constructor(private readonly openai: OpenAI) { }
+
+    constructor(private readonly openAiService: OpenAIService) { }
 
     async summarize(
-        memories: Memory[],
+        memories: MemoryEntity[],
         options: { detailed?: boolean; timeframe?: string } = {}
     ): Promise<string> {
         try {
@@ -25,14 +27,7 @@ export class SummarizationService {
                 }));
 
             const prompt = this.createPrompt(sortedMemories, options);
-            const completion = await this.openai.chat.completions.create({
-                model: 'gpt-4',
-                messages: [{ role: 'system', content: prompt }],
-                temperature: 0.7,
-                max_tokens: 500
-            });
-
-            return completion.choices[0].message.content || '';
+            return await this.openAiService.createChatCompletion(prompt);
         } catch (error) {
             Logger.error('Summarization failed:', error as Error);
             throw error;

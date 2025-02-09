@@ -1,5 +1,5 @@
 import { Logger } from '../../../services/logger.service';
-import { Memory, MemoryCategory } from '../entities/memory.entity';
+import { MemoryEntity, MemoryCategory } from '../entities/memory.entity';
 import { MemoryRepository } from '../repositories/memory.repository';
 import { SummarizationService } from './summarization.service';
 import { MemoryOperationResult } from '../value-objects/operation-result.vo';
@@ -46,7 +46,7 @@ export class ConsolidationService {
             );
 
             // Create consolidated memory in core memory
-            const consolidatedMemory = Memory.create(
+            const consolidatedMemory = MemoryEntity.create(
                 crypto.randomUUID(),
                 summary,
                 MemoryCategory.CORE,
@@ -62,7 +62,7 @@ export class ConsolidationService {
 
             // Move consolidated memories to archival
             for (const memory of memoriesToConsolidate) {
-                const archivalMemory = Memory.create(
+                const archivalMemory = MemoryEntity.create(
                     crypto.randomUUID(),
                     memory.content,
                     MemoryCategory.ARCHIVAL,

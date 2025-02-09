@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import readline from 'readline';
-import { ChatManager } from './core/chat-manager.class';
+import { ChatManager } from './application/chat/services/chat-manager.service';
 
 dotenv.config();
 

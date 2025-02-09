@@ -24,6 +24,13 @@ export class Logger {
         );
     }
 
+    static warn(message: string): void {
+        console.warn(
+            chalk.yellow('[Warning]'),
+            chalk.white(message)
+        );
+    }
+
     static error(error: Error | string, cause?: Error | string): void {
         console.error(
             chalk.red('[Error]'),

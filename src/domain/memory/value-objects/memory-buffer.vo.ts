@@ -1,12 +1,12 @@
-import { Memory } from '../entities/memory.entity';
+import { MemoryEntity } from '../entities/memory.entity';
 
 export class MemoryBuffer {
-    private entries: Memory[] = [];
+    private entries: MemoryEntity[] = [];
     private currentSize: number = 0;
 
     constructor(private readonly maxSize: number) { }
 
-    add(memory: Memory): void {
+    add(memory: MemoryEntity): void {
         if (this.currentSize < this.maxSize) {
             this.entries.push(memory);
             this.currentSize++;
@@ -18,7 +18,7 @@ export class MemoryBuffer {
         this.currentSize--;
     }
 
-    getEntries(): Memory[] {
+    getEntries(): MemoryEntity[] {
         return [...this.entries];
     }
 
@@ -34,7 +34,7 @@ export class MemoryBuffer {
         return this.currentSize >= this.maxSize;
     }
 
-    findLeastImportant(): Memory | null {
+    findLeastImportant(): MemoryEntity | null {
         if (this.currentSize === 0) return null;
         return this.entries.reduce((min, current) =>
             current.importance < min.importance ? current : min
