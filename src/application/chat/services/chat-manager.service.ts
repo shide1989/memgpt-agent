@@ -1,4 +1,4 @@
-import { FunctionCaller } from './function-caller.class';
+import { FunctionCallerService } from './function-caller.service';
 import { MemoryManager } from '../../memory/services/memory-manager.service';
 
 import { ChatConfig, Message } from '../interfaces/chat.interface';
@@ -10,7 +10,7 @@ import { BASE_SYS_PROMPT } from '../config/prompt.config';
 
 export class ChatManager extends OpenAIService {
     private memoryManager: MemoryManager;
-    private functionCaller: FunctionCaller;
+    private functionCaller: FunctionCallerService;
     private config: ChatConfig;
     private conversationHistory: Message[] = [];
 
@@ -19,7 +19,7 @@ export class ChatManager extends OpenAIService {
     ) {
         super();
         this.memoryManager = new MemoryManager();
-        this.functionCaller = new FunctionCaller(this.memoryManager);
+        this.functionCaller = new FunctionCallerService(this.memoryManager);
 
         // Default configuration
         this.config = {
