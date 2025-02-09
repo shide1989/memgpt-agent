@@ -59,3 +59,61 @@ Assistant: Your name is Seb.
 
 You: exit
 ```
+
+### Project Structure
+
+```
+├── README.md
+├── docker-compose.yml
+├── drizzle.config.ts
+├── init.sql
+├── package.json
+├── pnpm-lock.yaml
+├── src
+│   ├── application
+│   │   ├── chat
+│   │   │   ├── config
+│   │   │   │   └── prompt.config.ts
+│   │   │   └── services
+│   │   │       ├── chat-manager.service.ts
+│   │   │       ├── chat.interface.ts
+│   │   │       ├── function-caller.class.ts
+│   │   │       └── functions.interface.ts
+│   │   └── memory
+│   │       ├── queries
+│   │       │   └── search-memory.query.ts
+│   │       └── services
+│   │           ├── memory-manager.service.ts
+│   │           └── memory.interface.ts
+│   ├── domain
+│   │   └── memory
+│   │       ├── entities
+│   │       │   └── memory.entity.ts
+│   │       ├── repositories
+│   │       │   └── memory.repository.ts
+│   │       ├── services
+│   │       │   ├── archival-memory.service.ts
+│   │       │   ├── consolidation.service.ts
+│   │       │   ├── search.service.ts
+│   │       │   └── summarization.service.ts
+│   │       └── value-objects
+│   │           ├── index.ts
+│   │           ├── memory-buffer.vo.ts
+│   │           └── operation-result.vo.ts
+│   ├── index.ts
+│   └── infrastructure
+│       ├── logging
+│       │   └── logger.service.ts
+│       ├── openai
+│       │   └── openai.service.ts
+│       └── persistence
+│           └── postgres
+│               ├── client.ts
+│               ├── repositories
+│               │   └── postgres-memory.repository.ts
+│               └── schema
+│                   └── memory.schema.ts
+└── tsconfig.json
+
+22 directories, 30 files
+```
