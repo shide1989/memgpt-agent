@@ -2,13 +2,13 @@ import { v4 as uuidv4 } from 'uuid';
 import OpenAI from 'openai';
 
 import { ConsolidationConfig, ConsolidationService } from '../../../domain/memory/services/consolidation.service';
-import { Logger } from '../../../services/logger.service';
+import { Logger } from '../../../infrastructure/logging/logger.service';
 import {
     MemoryCategory,
     MemoryMetadata,
     MemoryOperationResult,
     MemorySearchParams
-} from '../../../types/memory.interface';
+} from './memory.interface';
 import { MemoryBuffer } from '../../../domain/memory/value-objects';
 import { MemoryEntity } from '../../../domain/memory/entities/memory.entity';
 import { PostgresMemoryRepository } from '../../../infrastructure/persistence/postgres/repositories/postgres-memory.repository';

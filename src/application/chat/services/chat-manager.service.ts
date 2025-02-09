@@ -1,13 +1,12 @@
-import OpenAI from 'openai';
-
+import { FunctionCaller } from './function-caller.class';
 import { MemoryManager } from '../../memory/services/memory-manager.service';
-import { FunctionCaller } from '../../../core/function-caller.class';
 
-import { Message, ChatConfig } from '../../../types/chat.interface';
-import { FunctionCallResult } from '../../../types/functions.interface';
+import { ChatConfig, Message } from './chat.interface';
+import { FunctionCallResult } from './functions.interface';
 
-import { Logger } from '../../../services/logger.service';
 import { OpenAIService } from '../../../infrastructure/openai/openai.service';
+import { Logger } from '../../../infrastructure/logging/logger.service';
+import { BASE_SYS_PROMPT } from '../config/prompt.config';
 
 export class ChatManager extends OpenAIService {
     private memoryManager: MemoryManager;
@@ -27,28 +26,7 @@ export class ChatManager extends OpenAIService {
             model: 'gpt-4o-mini',
             temperature: 0.5,
             maxTokens: 2000,
-            systemPrompt: `You are an AI assistant with self-managed memory capabilities. 
-You can store and recall information using your memory management functions.
-
-When storing memories, always include:
-1. The core information or fact
-2. Relevant context and implications
-3. Any connections to previous topics
-4. Why this information might be important later
-
-For example, instead of storing:
-"User likes coffee"
-
-Store as:
-"User prefers coffee, specifically mentioning dark roasts. This came up during a discussion about morning routines. They also noted having a home espresso machine, suggesting they're serious about coffee quality. This preference might be relevant for future discussions about meetings, productivity, or lifestyle."
-
-Memory Management Strategy:
-- Store detailed, immediate context in working memory
-- Move fundamental facts, preferences, and patterns to core memory
-- Archive contextual details that might be useful for future reference
-
-Always try to maintain relevant context in your working memory and store important information in core memory.
-When responding, consider relevant memories and maintain conversation coherence.`,
+            systemPrompt: this.initializeSystemPrompt(),
             ...config
         };
 
@@ -63,6 +41,9 @@ When responding, consider relevant memories and maintain conversation coherence.
         this.memoryManager.loadMemoriesFromDB();
     }
 
+    private initializeSystemPrompt(): string {
+        return BASE_SYS_PROMPT
+    }
 
     public async chat(userInput: string): Promise<string> {
         try {

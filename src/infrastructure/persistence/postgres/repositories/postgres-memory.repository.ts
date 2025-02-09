@@ -3,7 +3,7 @@ import { memories } from '../schema/memory.schema';
 import { eq, sql } from 'drizzle-orm';
 import { MemoryEntity, MemoryCategory } from '../../../../domain/memory/entities/memory.entity';
 import { MemoryRepository } from '../../../../domain/memory/repositories/memory.repository';
-import { Logger } from '../../../../services/logger.service';
+import { Logger } from '../../../logging/logger.service';
 
 export class PostgresMemoryRepository implements MemoryRepository {
     async insert(memory: MemoryEntity): Promise<void> {

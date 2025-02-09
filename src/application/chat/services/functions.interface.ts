@@ -1,4 +1,4 @@
-import { MemoryCategory, MemoryMetadata } from "./memory.interface";
+import { MemoryCategory, MemoryMetadata } from "../../memory/services/memory.interface";
 
 /**
  * Available memory management functions

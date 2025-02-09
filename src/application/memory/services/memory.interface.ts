@@ -1,4 +1,4 @@
-import { MemoryEntity } from "../domain/memory/entities/memory.entity";
+import { MemoryEntity } from "../../../domain/memory/entities/memory.entity";
 
 /**
  * Categories of memory as described in the MemGPT paper

@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import { MemoryEntity } from '../entities/memory.entity';
-import { Logger } from '../../../services/logger.service';
+import { Logger } from '../../../infrastructure/logging/logger.service';
 import { OpenAIService } from '../../../infrastructure/openai/openai.service';
 
 export class SummarizationService {

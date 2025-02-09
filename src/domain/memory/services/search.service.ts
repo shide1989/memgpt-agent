@@ -1,5 +1,5 @@
 import { OpenAIService } from '../../../infrastructure/openai/openai.service';
-import { Logger } from '../../../services/logger.service';
+import { Logger } from '../../../infrastructure/logging/logger.service';
 import { MemoryCategory, MemoryEntity } from '../entities/memory.entity';
 import { MemoryRepository } from '../repositories/memory.repository';
 

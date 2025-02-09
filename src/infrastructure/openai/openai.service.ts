@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { Logger } from '../../services/logger.service';
+import { Logger } from '../logging/logger.service';
 
 export class OpenAIService {
     protected openai: OpenAI;
@@ -42,7 +42,7 @@ export class OpenAIService {
                     content: prompt
                 }],
                 temperature: 0.7,
-                max_tokens: 500
+                max_tokens: 1000
             });
 
             return completion.choices[0].message.content || '';

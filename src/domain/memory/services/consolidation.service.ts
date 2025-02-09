@@ -1,4 +1,4 @@
-import { Logger } from '../../../services/logger.service';
+import { Logger } from '../../../infrastructure/logging/logger.service';
 import { MemoryEntity, MemoryCategory } from '../entities/memory.entity';
 import { MemoryRepository } from '../repositories/memory.repository';
 import { SummarizationService } from './summarization.service';

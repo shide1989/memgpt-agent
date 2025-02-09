@@ -15,7 +15,7 @@ async function main() {
         process.exit(1);
     }
 
-    const chatManager = new ChatManager(process.env.OPENAI_API_KEY);
+    const chatManager = new ChatManager();
 
     await chatManager.init();
 
