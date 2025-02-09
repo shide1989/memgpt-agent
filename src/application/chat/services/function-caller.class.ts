@@ -5,7 +5,7 @@ import {
     InsertMemoryParams,
     RecallMemoryParams,
     SearchMemoryParams
-} from './functions.interface';
+} from '../interfaces/functions.interface';
 import { MemoryManager } from '../../memory/services/memory-manager.service';
 
 export class FunctionCaller {

@@ -1,8 +1,8 @@
 import { FunctionCaller } from './function-caller.class';
 import { MemoryManager } from '../../memory/services/memory-manager.service';
 
-import { ChatConfig, Message } from './chat.interface';
-import { FunctionCallResult } from './functions.interface';
+import { ChatConfig, Message } from '../interfaces/chat.interface';
+import { FunctionCallResult } from '../interfaces/functions.interface';
 
 import { OpenAIService } from '../../../infrastructure/openai/openai.service';
 import { Logger } from '../../../infrastructure/logging/logger.service';
