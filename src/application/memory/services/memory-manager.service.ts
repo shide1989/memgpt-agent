@@ -1,20 +1,19 @@
 import { v4 as uuidv4 } from 'uuid';
-import OpenAI from 'openai';
 
+import { MemoryEntity } from '../../../domain/memory/entities/memory.entity';
 import { ConsolidationConfig, ConsolidationService } from '../../../domain/memory/services/consolidation.service';
+import { SearchService } from '../../../domain/memory/services/search.service';
+import { SummarizationService } from '../../../domain/memory/services/summarization.service';
+import { MemoryBuffer } from '../../../domain/memory/value-objects';
 import { Logger } from '../../../infrastructure/logging/logger.service';
+import { OpenAIService } from '../../../infrastructure/openai/openai.service';
+import { PostgresMemoryRepository } from '../../../infrastructure/persistence/postgres/repositories/postgres-memory.repository';
 import {
     MemoryCategory,
     MemoryMetadata,
     MemoryOperationResult,
     MemorySearchParams
-} from './memory.interface';
-import { MemoryBuffer } from '../../../domain/memory/value-objects';
-import { MemoryEntity } from '../../../domain/memory/entities/memory.entity';
-import { PostgresMemoryRepository } from '../../../infrastructure/persistence/postgres/repositories/postgres-memory.repository';
-import { SummarizationService } from '../../../domain/memory/services/summarization.service';
-import { SearchService } from '../../../domain/memory/services/search.service';
-import { OpenAIService } from '../../../infrastructure/openai/openai.service';
+} from '../interfaces/memory.interface';
 
 const consolidationConfig: ConsolidationConfig = {
     capacityThreshold: 0.8,
