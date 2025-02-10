@@ -97,12 +97,12 @@ export class MemoryManager {
         }
     }
 
-    public getCoreMemory(): MemoryEntity[] {
-        return this.coreMemory.getEntries();
+    public getCoreMemory(): MemoryBuffer {
+        return this.coreMemory;
     }
 
-    public getWorkingMemory(): MemoryEntity[] {
-        return this.workingMemory.getEntries();
+    public getWorkingMemory(): MemoryBuffer {
+        return this.workingMemory;
     }
 
     public async insertMemory(
