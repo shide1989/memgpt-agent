@@ -9,6 +9,13 @@ export class Logger {
         );
     }
 
+    static info(message: string): void {
+        console.log(
+            chalk.cyan('[Info]'),
+            chalk.white(message)
+        );
+    }
+
     static function(name: string, args: any): void {
         console.log(
             chalk.magenta('[Function]'),
@@ -24,11 +31,21 @@ export class Logger {
         );
     }
 
-    static error(error: Error | string): void {
+    static warn(message: string): void {
+        console.warn(
+            chalk.yellow('[Warning]'),
+            chalk.white(message)
+        );
+    }
+
+    static error(error: Error | string, cause?: Error | string): void {
         console.error(
             chalk.red('[Error]'),
             chalk.white(typeof error === 'string' ? error : error.message),
-            (error as Error).stack ? chalk.gray((error as Error).stack) : ''
+            (error as Error).stack ? chalk.gray((error as Error).stack) : '',
+            cause && chalk.yellow('\nCaused by:'),
+            cause && chalk.white(typeof cause === 'string' ? cause : cause.message),
+            cause && (cause as Error).stack ? chalk.gray((cause as Error).stack) : ''
         );
     }
 

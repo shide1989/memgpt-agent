@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import readline from 'readline';
-import { ChatManager } from './core/chat-manager.class';
+import { ChatManager } from './application/chat/services/chat-manager.service';
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ async function main() {
         process.exit(1);
     }
 
-    const chatManager = new ChatManager(process.env.OPENAI_API_KEY);
+    const chatManager = new ChatManager();
 
     await chatManager.init();
 

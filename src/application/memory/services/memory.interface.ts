@@ -1,15 +1,4 @@
-/**
- * Represents a memory entry in the system
- */
-export interface MemoryEntry {
-    id: string;
-    content: string;
-    timestamp: number;
-    importance: number; // 0-1 score for memory priority
-    category: MemoryCategory;
-    metadata: MemoryMetadata;
-    embedding?: number[] | null;  // Store embedding vector
-}
+import { MemoryEntity } from "../../../domain/memory/entities/memory.entity";
 
 /**
  * Categories of memory as described in the MemGPT paper
@@ -24,8 +13,6 @@ export enum MemoryCategory {
  * Additional metadata for memory entries
  */
 export interface MemoryMetadata {
-    lastAccessed?: number;
-    accessCount: number;
     consolidatedFrom?: string[];  // Add this line
     associations?: string[];
     archivedAt?: number
@@ -37,7 +24,7 @@ export interface MemoryMetadata {
 export interface MemoryBuffer {
     maxSize: number;
     currentSize: number;
-    entries: MemoryEntry[];
+    entries: MemoryEntity[];
 }
 
 /**
@@ -57,11 +44,4 @@ export interface MemorySearchParams {
     category?: MemoryCategory;
     limit?: number;
     minSimilarity?: number;  // Replace minImportance
-}
-
-interface SummarizationStrategy {
-    // Trigger summarization when buffer reaches threshold
-    workingMemoryThreshold: number;    // e.g., 80% full
-    timeWindow: number;                // e.g., last 24 hours
-    importanceThreshold: number;       // e.g., > 0.7
 }

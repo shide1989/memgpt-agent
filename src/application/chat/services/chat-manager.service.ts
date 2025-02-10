@@ -1,57 +1,40 @@
-import OpenAI from 'openai';
+import { FunctionCallerService } from './function-caller.service';
+import { MemoryManager } from '../../memory/services/memory-manager.service';
 
-import { MemoryManager } from './memory-manager.class';
-import { FunctionCaller } from './function-caller.class';
+import { ChatConfig, Message } from '../interfaces/chat.interface';
+import { FunctionCallResult } from '../interfaces/functions.interface';
 
-import { Message, ChatConfig } from '../types/chat.interface';
-import { FunctionCallResult } from '../types/functions.interface';
+import { OpenAIService } from '../../../infrastructure/openai/openai.service';
+import { Logger } from '../../../infrastructure/logging/logger.service';
+import { BASE_SYS_PROMPT } from '../config/prompt.config';
 
-import { Logger } from '../services/logger.service';
-
-export class ChatManager {
-    private openai: OpenAI;
+export class ChatManager extends OpenAIService {
     private memoryManager: MemoryManager;
-    private functionCaller: FunctionCaller;
+    private functionCaller: FunctionCallerService;
     private config: ChatConfig;
     private conversationHistory: Message[] = [];
 
     constructor(
-        apiKey: string,
         config: Partial<ChatConfig> = {}
     ) {
-        this.openai = new OpenAI({ apiKey });
+        super();
         this.memoryManager = new MemoryManager();
-        this.functionCaller = new FunctionCaller(this.memoryManager);
+        this.functionCaller = new FunctionCallerService(this.memoryManager);
 
         // Default configuration
         this.config = {
             model: 'gpt-4o-mini',
             temperature: 0.5,
             maxTokens: 2000,
-            systemPrompt: `You are an AI assistant with self-managed memory capabilities. 
-You can store and recall information using your memory management functions.
-
-When storing memories, always include:
-1. The core information or fact
-2. Relevant context and implications
-3. Any connections to previous topics
-4. Why this information might be important later
-
-For example, instead of storing:
-"User likes coffee"
-
-Store as:
-"User prefers coffee, specifically mentioning dark roasts. This came up during a discussion about morning routines. They also noted having a home espresso machine, suggesting they're serious about coffee quality. This preference might be relevant for future discussions about meetings, productivity, or lifestyle."
-
-Memory Management Strategy:
-- Store detailed, immediate context in working memory
-- Move fundamental facts, preferences, and patterns to core memory
-- Archive contextual details that might be useful for future reference
-
-Always try to maintain relevant context in your working memory and store important information in core memory.
-When responding, consider relevant memories and maintain conversation coherence.`,
+            systemPrompt: `You are an AI assistant with self-managed memory capabilities.`,
             ...config
         };
+
+    }
+
+    public async init() {
+        await this.memoryManager.loadMemoriesFromDB();
+        this.config.systemPrompt = BASE_SYS_PROMPT + '\n[MEMORY]\n' + this.memoryManager.getCoreMemory().map(m => m.content).join('\n')
 
         // Initialize conversation with system prompt
         this.conversationHistory.push({
@@ -59,11 +42,6 @@ When responding, consider relevant memories and maintain conversation coherence.
             content: this.config.systemPrompt
         });
     }
-
-    public async init() {
-        this.memoryManager.loadMemoriesFromDB();
-    }
-
 
     public async chat(userInput: string): Promise<string> {
         try {

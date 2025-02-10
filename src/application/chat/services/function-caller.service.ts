@@ -5,10 +5,10 @@ import {
     InsertMemoryParams,
     RecallMemoryParams,
     SearchMemoryParams
-} from '../types/functions.interface';
-import { MemoryManager } from './memory-manager.class';
+} from '../interfaces/functions.interface';
+import { MemoryManager } from '../../memory/services/memory-manager.service';
 
-export class FunctionCaller {
+export class FunctionCallerService {
     private memoryManager: MemoryManager;
 
     constructor(memoryManager: MemoryManager) {
