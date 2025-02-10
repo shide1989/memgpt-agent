@@ -13,6 +13,7 @@ export class ContextBuilderService {
      * Combines core knowledge, recent context, and relevant memories
      */
     buildContext(memories: MemoryBuffer): string {
+        // TODO: Implement context building with more memory categories.
         const context = this.compilationService.compile(memories, 'SIMPLE_TEMPLATE');
         return context;
     }
