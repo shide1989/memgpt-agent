@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { MemoryEntity } from '../entities/memory.entity';
+import { MemoryEntity } from '../../../infrastructure/persistence/postgres/entities/memory.entity';
 import { Logger } from '../../../infrastructure/logging/logger.service';
 import { OpenAIService } from '../../../infrastructure/openai/openai.service';
 

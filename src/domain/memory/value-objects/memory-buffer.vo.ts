@@ -1,4 +1,4 @@
-import { MemoryEntity } from '../entities/memory.entity';
+import { MemoryEntity } from '../../../infrastructure/persistence/postgres/entities/memory.entity';
 
 export class MemoryBuffer {
     private entries: MemoryEntity[] = [];

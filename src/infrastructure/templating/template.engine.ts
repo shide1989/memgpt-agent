@@ -1,6 +1,6 @@
 import Handlebars from 'handlebars';
 import * as templates from '../../application/memory/templates';
-import { MemoryEntity } from '../../domain/memory/entities/memory.entity';
+import { MemoryEntity } from '../persistence/postgres/entities/memory.entity';
 import { MemoryBuffer } from '../../domain/memory/value-objects';
 
 export class TemplateEngine {

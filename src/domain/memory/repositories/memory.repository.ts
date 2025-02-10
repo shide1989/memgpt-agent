@@ -1,4 +1,4 @@
-import { MemoryEntity, MemoryCategory } from '../entities/memory.entity';
+import { MemoryEntity, MemoryCategory } from '../../../infrastructure/persistence/postgres/entities/memory.entity';
 
 export interface MemoryRepository {
     insert(memory: MemoryEntity): Promise<void>;

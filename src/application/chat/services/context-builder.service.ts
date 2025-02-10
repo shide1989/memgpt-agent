@@ -1,6 +1,6 @@
 import { CompilationService } from '../../../domain/memory/services/compilation.service';
 import { MemoryBuffer } from '../../../domain/memory/value-objects';
-import { MemoryCategory } from '../../../domain/memory/entities/memory.entity';
+import { MemoryCategory } from '../../../infrastructure/persistence/postgres/entities/memory.entity';
 
 export class ContextBuilderService {
     private readonly compilationService: CompilationService;

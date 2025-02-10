@@ -40,9 +40,6 @@ export class ChatManager extends OpenAIService {
         // this.config.systemPrompt = BASE_SYS_PROMPT + '\n[MEMORY]\n' + this.memoryManager.getCoreMemory().map(m => m.content).join('\n')
         this.config.systemPrompt = BASE_SYS_PROMPT + '\n[MEMORY]\n' + this.contextBuilder.buildContext(this.memoryManager.getCoreMemory())
 
-        // Debug
-        console.log(this.config.systemPrompt);
-
         // Initialize conversation with system prompt
         this.conversationHistory.push({
             role: 'system',

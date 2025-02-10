@@ -1,5 +1,5 @@
 import { Logger } from '../../../infrastructure/logging/logger.service';
-import { MemoryEntity, MemoryCategory } from '../entities/memory.entity';
+import { MemoryEntity, MemoryCategory } from '../../../infrastructure/persistence/postgres/entities/memory.entity';
 import { MemoryRepository } from '../repositories/memory.repository';
 import { SummarizationService } from './summarization.service';
 import { MemoryOperationResult } from '../value-objects/operation-result.vo';
