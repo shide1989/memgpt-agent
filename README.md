@@ -21,41 +21,19 @@ A proof-of-concept implementation of a MemGPT-style chatbot with self-managed me
 ### Example chat
 
 ```
-❯ pnpm start
+❯ pnpm run start
 
+[Memory] Loading working memories {
+  "count": 0
+}
+[Memory] Loading core memories {
+  "count": 2
+}
 MemGPT Chat initialized. Type "exit" to quit.
 ---------------------------------------------
-You: my name is seb
-[Function] insert_memory {
-  "content": "Seb",
-  "category": "core",
-  "importance": 1
-}
-[Memory] Inserting {
-  "category": "core",
-  "content": "Seb...",
-  "importance": 1
-}
+You: hi
 
-=== Memory State ===
-Working Memory: 0/10
-Core Memory: 1/5
-Archival Memory: 0 entries
-==================
-
-
-Assistant: Nice to meet you, Seb! How can I assist you today? 
-
-You: what is my name
-[Function] search_memory {
-  "query": "Seb",
-  "category": "core"
-}
-[Memory] Search Results {
-  "count": 1
-}
-
-Assistant: Your name is Seb. 
+Assistant: Hi Seb! How's your day going? 
 
 You: exit
 ```
@@ -63,6 +41,8 @@ You: exit
 ### Project Structure
 
 ```
+.
+├── ANALYSIS.md
 ├── README.md
 ├── docker-compose.yml
 ├── drizzle.config.ts
@@ -74,17 +54,17 @@ You: exit
 │   │   ├── chat
 │   │   │   ├── config
 │   │   │   │   └── prompt.config.ts
+│   │   │   ├── interfaces
+│   │   │   │   ├── chat.interface.ts
+│   │   │   │   └── functions.interface.ts
 │   │   │   └── services
 │   │   │       ├── chat-manager.service.ts
-│   │   │       ├── chat.interface.ts
-│   │   │       ├── function-caller.class.ts
-│   │   │       └── functions.interface.ts
+│   │   │       └── function-caller.service.ts
 │   │   └── memory
-│   │       ├── queries
-│   │       │   └── search-memory.query.ts
+│   │       ├── interfaces
+│   │       │   └── memory.interface.ts
 │   │       └── services
-│   │           ├── memory-manager.service.ts
-│   │           └── memory.interface.ts
+│   │           └── memory-manager.service.ts
 │   ├── domain
 │   │   └── memory
 │   │       ├── entities
@@ -115,5 +95,5 @@ You: exit
 │                   └── memory.schema.ts
 └── tsconfig.json
 
-22 directories, 30 files
+23 directories, 30 files
 ```
