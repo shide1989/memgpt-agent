@@ -59,6 +59,7 @@ export class MemoryManager {
         try {
             // Load and map working memories
             const workingMemories = await this.memoryRepository.findByCategory(MemoryCategory.WORKING);
+            Logger.memory('Loading working memories', { count: workingMemories.length });
             workingMemories.forEach(wm => {
                 this.workingMemory.add({
                     ...wm,
@@ -70,6 +71,7 @@ export class MemoryManager {
 
             // Apply same mapping for core and archival
             const coreMemories = await this.memoryRepository.findByCategory(MemoryCategory.CORE);
+            Logger.memory('Loading core memories', { count: coreMemories.length });
             coreMemories.forEach(cm => {
                 this.coreMemory.add({
                     ...cm,
@@ -94,6 +96,14 @@ export class MemoryManager {
             Logger.error('Failed to load memories from database:');
             throw error;
         }
+    }
+
+    public getCoreMemory(): MemoryEntity[] {
+        return this.coreMemory.getEntries();
+    }
+
+    public getWorkingMemory(): MemoryEntity[] {
+        return this.workingMemory.getEntries();
     }
 
     public async insertMemory(

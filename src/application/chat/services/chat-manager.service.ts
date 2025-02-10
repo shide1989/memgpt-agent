@@ -26,23 +26,21 @@ export class ChatManager extends OpenAIService {
             model: 'gpt-4o-mini',
             temperature: 0.5,
             maxTokens: 2000,
-            systemPrompt: this.initializeSystemPrompt(),
+            systemPrompt: `You are an AI assistant with self-managed memory capabilities.`,
             ...config
         };
+
+    }
+
+    public async init() {
+        await this.memoryManager.loadMemoriesFromDB();
+        this.config.systemPrompt = BASE_SYS_PROMPT + '\n[MEMORY]\n' + this.memoryManager.getCoreMemory().map(m => m.content).join('\n')
 
         // Initialize conversation with system prompt
         this.conversationHistory.push({
             role: 'system',
             content: this.config.systemPrompt
         });
-    }
-
-    public async init() {
-        this.memoryManager.loadMemoriesFromDB();
-    }
-
-    private initializeSystemPrompt(): string {
-        return BASE_SYS_PROMPT
     }
 
     public async chat(userInput: string): Promise<string> {

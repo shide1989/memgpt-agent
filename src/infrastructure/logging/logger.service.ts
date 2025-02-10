@@ -9,6 +9,13 @@ export class Logger {
         );
     }
 
+    static info(message: string): void {
+        console.log(
+            chalk.cyan('[Info]'),
+            chalk.white(message)
+        );
+    }
+
     static function(name: string, args: any): void {
         console.log(
             chalk.magenta('[Function]'),
