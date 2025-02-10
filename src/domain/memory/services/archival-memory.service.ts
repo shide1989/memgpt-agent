@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { MemoryEntity, MemoryCategory } from "../entities/memory.entity";
+import { MemoryEntity, MemoryCategory } from "../../../infrastructure/persistence/postgres/entities/memory.entity";
 import { MemoryRepository } from "../repositories/memory.repository";
 
 export class ArchivalMemoryService {

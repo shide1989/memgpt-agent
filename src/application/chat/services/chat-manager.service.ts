@@ -7,10 +7,12 @@ import { FunctionCallResult } from '../interfaces/functions.interface';
 import { OpenAIService } from '../../../infrastructure/openai/openai.service';
 import { Logger } from '../../../infrastructure/logging/logger.service';
 import { BASE_SYS_PROMPT } from '../config/prompt.config';
+import { ContextBuilderService } from './context-builder.service';
 
 export class ChatManager extends OpenAIService {
     private memoryManager: MemoryManager;
     private functionCaller: FunctionCallerService;
+    private contextBuilder: ContextBuilderService;
     private config: ChatConfig;
     private conversationHistory: Message[] = [];
 
@@ -21,6 +23,7 @@ export class ChatManager extends OpenAIService {
         this.memoryManager = new MemoryManager();
         this.functionCaller = new FunctionCallerService(this.memoryManager);
 
+        this.contextBuilder = new ContextBuilderService();
         // Default configuration
         this.config = {
             model: 'gpt-4o-mini',
@@ -34,7 +37,8 @@ export class ChatManager extends OpenAIService {
 
     public async init() {
         await this.memoryManager.loadMemoriesFromDB();
-        this.config.systemPrompt = BASE_SYS_PROMPT + '\n[MEMORY]\n' + this.memoryManager.getCoreMemory().map(m => m.content).join('\n')
+        // this.config.systemPrompt = BASE_SYS_PROMPT + '\n[MEMORY]\n' + this.memoryManager.getCoreMemory().map(m => m.content).join('\n')
+        this.config.systemPrompt = BASE_SYS_PROMPT + '\n[MEMORY]\n' + this.contextBuilder.buildContext(this.memoryManager.getCoreMemory())
 
         // Initialize conversation with system prompt
         this.conversationHistory.push({

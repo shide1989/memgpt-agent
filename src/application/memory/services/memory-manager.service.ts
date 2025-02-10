@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { MemoryEntity } from '../../../domain/memory/entities/memory.entity';
+import { MemoryEntity } from '../../../infrastructure/persistence/postgres/entities/memory.entity';
 import { ConsolidationConfig, ConsolidationService } from '../../../domain/memory/services/consolidation.service';
 import { SearchService } from '../../../domain/memory/services/search.service';
 import { SummarizationService } from '../../../domain/memory/services/summarization.service';
@@ -97,12 +97,12 @@ export class MemoryManager {
         }
     }
 
-    public getCoreMemory(): MemoryEntity[] {
-        return this.coreMemory.getEntries();
+    public getCoreMemory(): MemoryBuffer {
+        return this.coreMemory;
     }
 
-    public getWorkingMemory(): MemoryEntity[] {
-        return this.workingMemory.getEntries();
+    public getWorkingMemory(): MemoryBuffer {
+        return this.workingMemory;
     }
 
     public async insertMemory(

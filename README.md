@@ -47,7 +47,6 @@ You: exit
 
 ```
 .
-├── ANALYSIS.md
 ├── README.md
 ├── docker-compose.yml
 ├── drizzle.config.ts
@@ -64,12 +63,15 @@ You: exit
 │   │   │   │   └── functions.interface.ts
 │   │   │   └── services
 │   │   │       ├── chat-manager.service.ts
+│   │   │       ├── context-builder.service.ts
 │   │   │       └── function-caller.service.ts
 │   │   └── memory
 │   │       ├── interfaces
 │   │       │   └── memory.interface.ts
-│   │       └── services
-│   │           └── memory-manager.service.ts
+│   │       ├── services
+│   │       │   └── memory-manager.service.ts
+│   │       └── templates
+│   │           └── index.ts
 │   ├── domain
 │   │   └── memory
 │   │       ├── entities
@@ -78,6 +80,7 @@ You: exit
 │   │       │   └── memory.repository.ts
 │   │       ├── services
 │   │       │   ├── archival-memory.service.ts
+│   │       │   ├── compilation.service.ts
 │   │       │   ├── consolidation.service.ts
 │   │       │   ├── search.service.ts
 │   │       │   └── summarization.service.ts
@@ -91,14 +94,16 @@ You: exit
 │       │   └── logger.service.ts
 │       ├── openai
 │       │   └── openai.service.ts
-│       └── persistence
-│           └── postgres
-│               ├── client.ts
-│               ├── repositories
-│               │   └── postgres-memory.repository.ts
-│               └── schema
-│                   └── memory.schema.ts
+│       ├── persistence
+│       │   └── postgres
+│       │       ├── client.ts
+│       │       ├── repositories
+│       │       │   └── postgres-memory.repository.ts
+│       │       └── schema
+│       │           └── memory.schema.ts
+│       └── templating
+│           └── template.engine.ts
 └── tsconfig.json
 
-23 directories, 30 files
+25 directories, 34 files
 ```

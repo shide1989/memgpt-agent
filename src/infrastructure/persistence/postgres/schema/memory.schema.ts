@@ -9,7 +9,7 @@ import {
     pgEnum
 } from 'drizzle-orm/pg-core';
 import { vector } from 'drizzle-orm/pg-core';
-import { MemoryCategory, MemoryMetadata } from '../../../../domain/memory/entities/memory.entity';
+import { MemoryCategory, MemoryMetadata } from '../entities/memory.entity';
 
 // Create an enum for memory categories
 export const memoryCategoryEnum = pgEnum('memory_category', [
@@ -18,7 +18,7 @@ export const memoryCategoryEnum = pgEnum('memory_category', [
     MemoryCategory.ARCHIVAL
 ]);
 
-export const memories = pgTable('memories', {
+export const memoriesTable = pgTable('memories', {
     id: uuid('id').primaryKey().defaultRandom(),
     content: text('content').notNull(),
     category: memoryCategoryEnum('category').notNull(),
@@ -31,5 +31,5 @@ export const memories = pgTable('memories', {
 });
 
 // Type inference helpers
-export type Memory = typeof memories.$inferSelect;
-export type NewMemory = typeof memories.$inferInsert;
+export type Memory = typeof memoriesTable.$inferSelect;
+export type NewMemory = typeof memoriesTable.$inferInsert;
