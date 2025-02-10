@@ -1,6 +1,9 @@
 # MemGPT POC
 
 A proof-of-concept implementation of a MemGPT-style chatbot with self-managed memory capabilities.
+
+#### Goal
+
 The goal is to showcase the usage of the different types of memory (working, core etc.) inside a given context, and try to have the optimal context management.
 I've been inspired from Letta's papers to build this prototype [arxiv.org/pdf/2310.08560](https://arxiv.org/pdf/2310.08560)
 
