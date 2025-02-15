@@ -4,7 +4,7 @@ import { MemoryManager } from '../../memory/services/memory-manager.service';
 import { ChatConfig, Message } from '../interfaces/chat.interface';
 import { FunctionCallResult } from '../interfaces/functions.interface';
 
-import { OpenAIService } from '../../../infrastructure/openai/openai.service';
+import { OpenAIService } from '../../../infrastructure/llms/openai.service';
 import { Logger } from '../../../infrastructure/logging/logger.service';
 import { BASE_SYS_PROMPT } from '../config/prompt.config';
 import { ContextBuilderService } from './context-builder.service';
@@ -55,53 +55,57 @@ export class ChatManager extends OpenAIService {
                 content: userInput
             });
 
-            // Get completion from OpenAI
-            const completion = await this.openai.chat.completions.create({
-                model: this.config.model,
-                messages: this.conversationHistory,
-                temperature: this.config.temperature,
-                max_tokens: this.config.maxTokens,
-                functions: this.functionCaller.getFunctionDefinitions(),
-                function_call: 'auto'
+            // Get completion using parent class method
+            const response = await this.createChatCompletion(
+                this.conversationHistory,
+                {
+                    temperature: this.config.temperature,
+                    max_tokens: this.config.maxTokens,
+                    functions: this.functionCaller.getFunctionDefinitions(),
+                    function_call: 'auto'
+                }
+            );
+
+            // Add assistant's response to history
+            this.conversationHistory.push({
+                role: 'assistant',
+                content: response.content || '',
+                ...(response.tool_calls && { tool_calls: response.tool_calls })
             });
 
-            const response = completion.choices[0].message;
+            // If no tool calls, return content directly
+            if (!response.tool_calls?.length) {
+                return response.content || '';
+            }
 
-            // Handle function calls if present
-            if (response.function_call) {
-                const functionResult = await this.handleFunctionCall(response.function_call);
+            // Handle all tool calls
+            for (const toolCall of response.tool_calls) {
+                const functionResult = await this.handleFunctionCall(toolCall);
 
                 // Add function result to conversation
                 this.conversationHistory.push({
-                    role: 'function',
-                    name: response.function_call.name,
+                    role: 'tool',
+                    name: toolCall.name,
                     content: JSON.stringify(functionResult.data)
                 });
-
-                // Get another completion to process function result
-                const secondCompletion = await this.openai.chat.completions.create({
-                    model: this.config.model,
-                    messages: this.conversationHistory,
-                    temperature: this.config.temperature,
-                    max_tokens: this.config.maxTokens
-                });
-
-                const finalResponse = secondCompletion.choices[0].message;
-                this.conversationHistory.push({
-                    role: 'assistant',
-                    content: finalResponse.content || ''
-                });
-
-                return finalResponse.content || '';
             }
 
-            // Handle regular response
+            // Get final response after function calls
+            const finalResponse = await this.createChatCompletion(
+                this.conversationHistory,
+                {
+                    temperature: this.config.temperature,
+                    max_tokens: this.config.maxTokens
+                }
+            );
+
+            // Add final response to history
             this.conversationHistory.push({
                 role: 'assistant',
-                content: response.content || ''
+                content: finalResponse.content || ''
             });
 
-            return response.content || '';
+            return finalResponse.content || '';
         } catch (error) {
             console.error('Error in chat:', error);
             throw new Error(`Chat error: ${(error as Error).message}`);

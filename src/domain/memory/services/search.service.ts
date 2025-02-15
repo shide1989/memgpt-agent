@@ -1,4 +1,4 @@
-import { OpenAIService } from '../../../infrastructure/openai/openai.service';
+import { OpenAIService } from '../../../infrastructure/llms/openai.service';
 import { Logger } from '../../../infrastructure/logging/logger.service';
 import { MemoryCategory, MemoryEntity } from '../../../infrastructure/persistence/postgres/entities/memory.entity';
 import { MemoryRepository } from '../repositories/memory.repository';

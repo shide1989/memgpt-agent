@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { MemoryEntity } from '../../../infrastructure/persistence/postgres/entities/memory.entity';
 import { Logger } from '../../../infrastructure/logging/logger.service';
-import { OpenAIService } from '../../../infrastructure/openai/openai.service';
+import { OpenAIService } from '../../../infrastructure/llms/openai.service';
 
 export class SummarizationService {
 
@@ -27,7 +27,12 @@ export class SummarizationService {
                 }));
 
             const prompt = this.createPrompt(sortedMemories, options);
-            return await this.openAiService.createChatCompletion(prompt);
+            const response = await this.openAiService.createChatCompletion([{
+                role: 'system',
+                content: prompt
+            }]);
+
+            return response.content ?? '';
         } catch (error) {
             Logger.error('Summarization failed:', error as Error);
             throw error;

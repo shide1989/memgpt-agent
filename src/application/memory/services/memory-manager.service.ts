@@ -6,7 +6,7 @@ import { SearchService } from '../../../domain/memory/services/search.service';
 import { SummarizationService } from '../../../domain/memory/services/summarization.service';
 import { MemoryBuffer } from '../../../domain/memory/value-objects';
 import { Logger } from '../../../infrastructure/logging/logger.service';
-import { OpenAIService } from '../../../infrastructure/openai/openai.service';
+import { OpenAIService } from '../../../infrastructure/llms/openai.service';
 import { PostgresMemoryRepository } from '../../../infrastructure/persistence/postgres/repositories/postgres-memory.repository';
 import {
     MemoryCategory,
