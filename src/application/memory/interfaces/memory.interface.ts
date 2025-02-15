@@ -13,9 +13,13 @@ export enum MemoryCategory {
  * Additional metadata for memory entries
  */
 export interface MemoryMetadata {
-    consolidatedFrom?: string[];  // Add this line
+    consolidatedFrom?: string[];
+    consolidationTimestamp?: number;
     associations?: string[];
-    archivedAt?: number
+    archivedAt?: number;
+    originalId?: string;
+    originalCategory?: MemoryCategory;
+    type?: string;
 }
 
 /**

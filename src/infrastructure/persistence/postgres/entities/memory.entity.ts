@@ -1,14 +1,9 @@
+import { MemoryMetadata } from "../../../../application/memory/interfaces/memory.interface";
+
 export enum MemoryCategory {
     CORE = 'core',
     WORKING = 'working',
     ARCHIVAL = 'archival'
-}
-
-export interface MemoryMetadata {
-    consolidatedFrom?: string[];
-    associations?: string[];
-    archivedAt?: number;
-    originalId?: string;
 }
 
 export class MemoryEntity {
@@ -16,7 +11,7 @@ export class MemoryEntity {
         public readonly id: string,
         public readonly content: string,
         public readonly category: MemoryCategory,
-        public readonly importance: number,
+        public importance: number,
         public readonly timestamp: number,
         public readonly embedding?: number[],
         public readonly metadata: MemoryMetadata = {},

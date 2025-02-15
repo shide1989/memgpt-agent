@@ -19,8 +19,14 @@ async function main() {
 
     await chatManager.init();
 
+    rl.on('close', () => {
+        chatManager.cleanup();
+        process.exit(0);
+    });
+
     console.log('MemGPT Chat initialized. Type "exit" to quit.');
     console.log('---------------------------------------------');
+
 
     const askQuestion = () => {
         rl.question('You: ', async (input) => {

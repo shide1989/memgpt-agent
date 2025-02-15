@@ -18,3 +18,22 @@ export interface HeartbeatResult {
     action?: string;
     thoughts?: string;
 }
+
+interface MonitoringSystem {
+    // Memory usage monitoring
+    // TODO: later
+    // checkMemoryUtilization(): Promise<void>;
+
+    // Context window management
+    // TODO: later
+    // evaluateContextWindow(): Promise<void>;
+
+    // Memory operations
+    // TODO: later
+    // triggerMemoryConsolidation(): Promise<void>;
+    // TODO: later
+    // cleanupStaleMemories(): Promise<void>;
+
+    // Self-reflection
+    performSelfReflection(): Promise<void>;
+}

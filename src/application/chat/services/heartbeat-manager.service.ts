@@ -14,10 +14,10 @@ export class HeartbeatManager {
         config?: Partial<HeartbeatConfig>
     ) {
         this.config = {
-            intervalMs: 60000,        // 1 minute default
-            maxIdleTimeMs: 300000,    // 5 minutes default
+            intervalMs: 60_000,        // 1 minute default
+            maxIdleTimeMs: 300_000,    // 5 minutes default
             minThoughtTokens: 50,
-            maxThoughtTokens: 200,
+            maxThoughtTokens: 500,
             ...config
         };
 

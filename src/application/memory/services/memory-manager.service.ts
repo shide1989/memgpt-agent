@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { MemoryEntity } from '../../../infrastructure/persistence/postgres/entities/memory.entity';
-import { ConsolidationConfig, ConsolidationService } from '../../../domain/memory/services/consolidation.service';
+import { ConsolidationConfig, ConsolidationService } from './consolidation.service';
 import { SearchService } from '../../../domain/memory/services/search.service';
 import { SummarizationService } from '../../../domain/memory/services/summarization.service';
 import { MemoryBuffer } from '../../../domain/memory/value-objects';
@@ -289,6 +289,25 @@ export class MemoryManager {
         return memories.reduce((min, current) =>
             current.importance < min.importance ? current : min
         );
+    }
+
+    public async consolidateMemories(): Promise<MemoryOperationResult> {
+        try {
+            if (this.consolidationService.shouldConsolidate(this.workingMemory)) {
+                return await this.consolidationService.consolidate(this.workingMemory);
+            }
+
+            return {
+                success: true,
+                message: 'No consolidation needed'
+            };
+        } catch (error) {
+            Logger.error('Memory consolidation failed:', error as Error);
+            return {
+                success: false,
+                message: `Consolidation failed: ${(error as Error).message}`
+            };
+        }
     }
 
     public async cleanupMemories(threshold: number = 30): Promise<MemoryOperationResult> {
